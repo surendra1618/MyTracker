@@ -1,0 +1,19 @@
+#routeHeader {
+  color: green;
+}
+
+#searchBar {
+  height: 30px;
+}
+
+#table {
+  border: azure;
+}
+
+.tableDisplay th, td {
+  color: green;
+}
+
+#newBtn {
+  alignment: center;
+}

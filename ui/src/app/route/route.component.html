@@ -1,0 +1,52 @@
+<div id="routeHeader">
+  <h3>{{ title }}</h3>
+  <input id='searchBar' type='text' placeholder='Search by Id or Name' [(ngModel)]='routeParam'>
+  <button class='btn' (click)=search(routeParam)>Search</button>
+  <button id='newBtn' class='btn' *ngIf='!newRouteField' (click)='newRouteFieldsDisplay()'>New Route</button>
+</div>
+<br>
+<div class='tableDisplay'>
+  <table class='table table-striped'>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Route Name</th>
+      <th>Start Location</th>
+      <th>End Location</th>
+      <th>Length</th>
+      <th>Duration</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor='let route of routes'>
+      <td>{{ route.routeId }}</td>
+      <td>{{ route.routeName}}</td>
+      <td>{{ route.startLocation }}</td>
+      <td>{{ route.endLocation }}</td>
+      <td>{{ route.routeLength }}</td>
+      <td>{{ route.routeDuration }}</td>
+      <td>
+        <button class='glyphicon glyphicon-edit'></button>
+      </td>
+      <td>
+        <button class='glyphicon glyphicon-remove' (click)='removeRoute(route.routeId)'></button>
+      </td>
+    </tr>
+    <tr *ngIf='newRouteField'>
+      <td></td>
+      <td></td>
+      <td><input type="text" placeholder='Start Location' [(ngModel)]='newRoute.startLocation'></td>
+      <td><input type="text" placeholder='End Location' [(ngModel)]='newRoute.endLocation'></td>
+      <td><input type="text" placeholder='Length' [(ngModel)]='newRoute.routeLength'></td>
+      <td><input type="text" placeholder='Duration' [(ngModel)]='newRoute.routeDuration'></td>
+      <td>
+        <button class='glyphicon glyphicon-ok' (click)='saveRoute()'></button>
+      </td>
+      <td>
+        <button class='glyphicon glyphicon-remove' (click)='newRouteFieldsDisplay()'></button>
+      </td>
+    </tr>
+  </table>
+</div>

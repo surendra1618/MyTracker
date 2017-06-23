@@ -1,0 +1,22 @@
+.appHeader {
+  text-align: center;
+}
+
+.appHeader h1 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.appMenuBar {
+  background-color: blue;
+}
+
+.appMenuBar a {
+  font-size: 150%;
+  margin-right: 30px;
+  color: white;
+}
+
+.pageLeftSide {
+  margin-text: 20px;
+}
