@@ -1,11 +1,12 @@
 <div id="routeHeader">
   <h3>{{ title }}</h3>
-  <input id='searchBar' type='text' placeholder='Search by Id or Name' [(ngModel)]='routeParam'>
+  <input id='searchBar' type='text' [(ngModel)]='routeParam'>
   <button class='btn' (click)=search(routeParam)>Search</button>
-  <button id='newBtn' class='btn' *ngIf='!newRouteField' (click)='newRouteFieldsDisplay()'>New Route</button>
+  <button class='btn' *ngIf='!newFieldsDisplay' (click)='displayNewRouteFields()'>New Route</button>
 </div>
 <br>
-<div class='tableDisplay'>
+
+<div class='tableDisplay' *ngIf='routes.length!=0||newFieldsDisplay'>
   <table class='table table-striped'>
     <thead>
     <tr>
@@ -22,31 +23,52 @@
     <tbody>
     <tr *ngFor='let route of routes'>
       <td>{{ route.routeId }}</td>
-      <td>{{ route.routeName}}</td>
-      <td>{{ route.startLocation }}</td>
-      <td>{{ route.endLocation }}</td>
-      <td>{{ route.routeLength }}</td>
-      <td>{{ route.routeDuration }}</td>
-      <td>
-        <button class='glyphicon glyphicon-edit'></button>
+      <td>{{ route.routeName }}</td>
+
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>{{ route.startLocation }}</td>
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>{{ route.endLocation }}</td>
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>{{ route.routeLength }}</td>
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>{{ route.routeDuration }}</td>
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>
+        <button class='glyphicon glyphicon-edit' (click)='displayEditFields(route)'></button>
       </td>
-      <td>
+      <td *ngIf='!fieldsDisplayEdit||route.routeId!=selectedRoute.routeId'>
         <button class='glyphicon glyphicon-remove' (click)='removeRoute(route.routeId)'></button>
       </td>
+
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <input type='text' placeholder='{{ route.startLocation }}' [(ngModel)]='selectedRoute.startLocation'>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <input type='text' placeholder='{{ route.endLocation }}' [(ngModel)]='selectedRoute.endLocation'>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <input type='text' placeholder='{{ route.routeLength }}' [(ngModel)]='selectedRoute.routeLength'></td>
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <input type='text' placeholder='{{ route.routeDuration }}' [(ngModel)]='selectedRoute.routeDuration'>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <button class='glyphicon glyphicon-ok' (click)='updateRoute(selectedRoute)'></button>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&route.routeId===selectedRoute.routeId'>
+        <button class='glyphicon glyphicon-remove' (click)='undoDisplayEditFields()'></button>
+      </td>
     </tr>
-    <tr *ngIf='newRouteField'>
-      <td></td>
-      <td></td>
+
+    <tr *ngIf='newFieldsDisplay'>
+      <td><label>{{ newRoute.routeId }}</label></td>
+      <td><label>{{ newRoute.routeName }}</label></td>
       <td><input type="text" placeholder='Start Location' [(ngModel)]='newRoute.startLocation'></td>
       <td><input type="text" placeholder='End Location' [(ngModel)]='newRoute.endLocation'></td>
       <td><input type="text" placeholder='Length' [(ngModel)]='newRoute.routeLength'></td>
       <td><input type="text" placeholder='Duration' [(ngModel)]='newRoute.routeDuration'></td>
       <td>
-        <button class='glyphicon glyphicon-ok' (click)='saveRoute()'></button>
+        <button class='glyphicon glyphicon-ok' (click)='addRoute(newRoute)'></button>
       </td>
       <td>
-        <button class='glyphicon glyphicon-remove' (click)='newRouteFieldsDisplay()'></button>
+        <button class='glyphicon glyphicon-remove' (click)='displayNewRouteFields()'></button>
       </td>
     </tr>
+    </tbody>
   </table>
 </div>

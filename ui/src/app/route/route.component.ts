@@ -8,13 +8,15 @@ import {RouteService} from './route.service';
   templateUrl: './route.component.html',
   styleUrls: ['./route.component.css']
 })
-
 export class RouteComponent implements OnInit {
   title: string;
-  newRouteField: boolean;
   routeParam: any;
-  errorMessage: string;
+
+  newFieldsDisplay: boolean;
+  fieldsDisplayEdit: boolean;
+
   newRoute: IRoute;
+  selectedRoute: IRoute;
   routes: IRoute[];
 
   constructor(private _routeService: RouteService) {
@@ -22,7 +24,8 @@ export class RouteComponent implements OnInit {
 
   ngOnInit(): void {
     this.title = 'Route';
-    this.newRouteField = false;
+    this.newFieldsDisplay = false;
+    this.fieldsDisplayEdit = false;
     this.newRoute = {
       routeId: null,
       routeName: '',
@@ -31,11 +34,12 @@ export class RouteComponent implements OnInit {
       routeLength: null,
       routeDuration: null
     }
+    this.selectedRoute = this.newRoute;
     this.routes = [];
   }
 
-  newRouteFieldsDisplay(): void {
-    this.newRouteField = !this.newRouteField;
+  displayNewRouteFields(): void {
+    this.newFieldsDisplay = !this.newFieldsDisplay;
     this.newRoute = {
       routeId: null,
       routeName: '',
@@ -46,10 +50,44 @@ export class RouteComponent implements OnInit {
     }
   }
 
-  saveRoute(): void {
-    console.log(this.newRoute);
-    this._routeService.postRoute(this.newRoute);
-    this.newRouteFieldsDisplay();
+  displayEditFields(route: IRoute): void {
+    if (!this.fieldsDisplayEdit) {
+      this.fieldsDisplayEdit = !this.fieldsDisplayEdit;
+    }
+    this.selectedRoute = Object.assign({}, route);
+  }
+
+  undoDisplayEditFields(): void {
+    this.fieldsDisplayEdit = !this.fieldsDisplayEdit;
+    this.selectedRoute = {
+      routeId: null,
+      routeName: '',
+      startLocation: '',
+      endLocation: '',
+      routeLength: null,
+      routeDuration: null
+    }
+  }
+
+  addRoute(value: IRoute): void {
+    this._routeService.postRoute(value)
+      .subscribe(data => this.search(this.routeParam));
+    alert('Route Added successfully');
+  }
+
+  updateRoute(route: IRoute): void {
+    this._routeService.putRoute(route)
+      .subscribe(data => this.search(this.routeParam));
+    alert('Route Update Successful');
+  }
+
+  removeRoute(value: number): void {
+    if (confirm('Are you sure you want to delete this vehicle?')) {
+      this._routeService.deleteRoute(value)
+        .subscribe(data => this.routes.length < 2 ?
+          this.ngOnInit() : this.search(this.routeParam));
+    } else {
+    }
   }
 
   searchAllRoutes(): void {
@@ -59,8 +97,7 @@ export class RouteComponent implements OnInit {
 
   searchRouteById(value: number): void {
     this._routeService.getRouteById(value)
-      .subscribe(data => this.routes = data,
-        error => this.errorMessage = <any> error);
+      .subscribe(data => this.routes = data);
   }
 
   searchRouteByName(value: string): void {
@@ -68,19 +105,14 @@ export class RouteComponent implements OnInit {
       .subscribe(data => this.routes = data);
   }
 
-  removeRoute(value: number): void {
-    this._routeService.deleteRoute(value)
-      .subscribe(data => this.routes.length < 2 ?
-        this.ngOnInit() : this.search(this.routeParam));
-  }
-
   search(routeParam: any): void {
-    if (routeParam == null) {
+    if (routeParam == null || routeParam === '') {
       this.searchAllRoutes();
     } else if (routeParam.match(/^[0-9]+$/) != null) {
       this.searchRouteById(routeParam);
     } else {
       this.searchRouteByName(routeParam);
     }
+    this.ngOnInit();
   }
 }

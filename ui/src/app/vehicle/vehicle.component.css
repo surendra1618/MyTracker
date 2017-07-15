@@ -1,0 +1,20 @@
+#vehicleHeader {
+  color: blue;
+}
+
+#searchBar {
+  height: 30px;
+}
+
+#tableDisplay {
+  border: azure;
+}
+
+#tableDisplay th, td {
+  color: blue;
+}
+
+#newBtn {
+  alignment: center;
+}
+

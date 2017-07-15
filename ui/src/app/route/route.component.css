@@ -1,5 +1,5 @@
 #routeHeader {
-  color: green;
+  color: blue;
 }
 
 #searchBar {
@@ -11,9 +11,5 @@
 }
 
 .tableDisplay th, td {
-  color: green;
-}
-
-#newBtn {
-  alignment: center;
+  color: blue;
 }

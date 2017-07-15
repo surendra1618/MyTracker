@@ -1,22 +1,24 @@
-.appHeader {
-  text-align: center;
-}
-
-.appHeader h1 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.appMenuBar {
+#appHeader {
+  color: white;
   background-color: blue;
 }
 
-.appMenuBar a {
-  font-size: 150%;
-  margin-right: 30px;
-  color: white;
+#appHeader a, h1, router-outlet {
+  margin-left: 25px;
 }
 
-.pageLeftSide {
-  margin-text: 20px;
+#appMenuBar {
+  background-color: white;
+  border-bottom-style: groove;
+  border-bottom-color: blue;
+}
+
+#appMenuBar a {
+  font-size: 150%;
+  margin-right: 30px;
+  color: blue;
+}
+
+#shiftPageToLeft {
+  margin-left: 25px;
 }

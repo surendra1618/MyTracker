@@ -1,7 +1,61 @@
-<div style='text-align:center'>
-    <h3>{{ title }}</h3>
-    <table class='table'>
-        <thead><tr>Vehicle Id</tr></thead>
-        <tbody><tr></tr></tbody>
-    </table>
+<div id='vehicleHeader'>
+  <h3>{{ title }}</h3>
+  <div>
+    <input type='text' [(ngModel)]='vehicleParam'>
+    <button class='btn' (click)='search(vehicleParam)'>Search</button>
+    <button class='btn' (click)='displayNewFields()' *ngIf='!newFieldsDisplay'>New Vehicle</button>
+  </div>
+</div>
+<br>
+
+<div id='tableDisplay' *ngIf='vehicles.length!=0||newFieldsDisplay'>
+  <table class='table table-striped'>
+    <thead>
+    <tr>
+      <th>Vehicle ID</th>
+      <th>Vehicle Name</th>
+      <th>Vehicle Status</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor='let vehicle of vehicles'>
+      <td>{{ vehicle.vehicleId }}</td>
+
+      <td *ngIf='!fieldsDisplayEdit||vehicle.vehicleId!=selectedVehicle.vehicleId'>{{ vehicle.vehicleName }}</td>
+      <td *ngIf='!fieldsDisplayEdit||vehicle.vehicleId!=selectedVehicle.vehicleId'>{{ vehicle.vehicleStatus }}</td>
+      <td *ngIf='!fieldsDisplayEdit||vehicle.vehicleId!=selectedVehicle.vehicleId'>
+        <button class='glyphicon glyphicon-edit' (click)='displayEditFields(vehicle)'></button>
+      </td>
+      <td *ngIf='!fieldsDisplayEdit||vehicle.vehicleId!=selectedVehicle.vehicleId'>
+        <button class='glyphicon glyphicon-remove' (click)='removeVehicle(vehicle.vehicleId)'></button>
+      </td>
+
+      <td *ngIf='fieldsDisplayEdit&&vehicle.vehicleId===selectedVehicle.vehicleId'>
+        <input type='text' placeholder={{vehicle.vehicleName}} [(ngModel)]='selectedVehicle.vehicleName'>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&vehicle.vehicleId===selectedVehicle.vehicleId'>
+        <input type='text' placeholder={{vehicle.vehicleStatus}} [(ngModel)]='selectedVehicle.vehicleStatus'>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&vehicle.vehicleId===selectedVehicle.vehicleId'>
+        <button class='glyphicon glyphicon-ok' (click)='updateVehicle(selectedVehicle)'></button>
+      </td>
+      <td *ngIf='fieldsDisplayEdit&&vehicle.vehicleId===selectedVehicle.vehicleId'>
+        <button class='glyphicon glyphicon-remove' (click)='undoDisplayEditFields()'></button>
+      </td>
+    </tr>
+    <tr *ngIf='newFieldsDisplay'>
+      <td></td>
+      <td><input type='text' placeholder='Vehicle Name' [(ngModel)]='newVehicle.vehicleName'></td>
+      <td><input type='text' placeholder='Vehicle Status' [(ngModel)]='newVehicle.vehicleStatus'></td>
+      <td>
+        <button class='glyphicon glyphicon-ok' (click)='addNewVehicle(newVehicle)'></button>
+      </td>
+      <td>
+        <button class='glyphicon glyphicon-remove' (click)='displayNewFields()'></button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>

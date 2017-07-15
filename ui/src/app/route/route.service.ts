@@ -13,9 +13,18 @@ export class RouteService {
   constructor(private _http: Http) {
   }
 
-  postRoute(value: IRoute): void {
-    // console.log('Inside Service, IRoute Input: ' + value);
-    // this._http.post(this.routeUrl)
+  postRoute(value: IRoute): Observable<Response> {
+    console.log('Inside Service, IRoute Input: ' + value);
+    return this._http.post(this._routeUrl, value);
+  }
+
+  putRoute(value: IRoute): Observable<Response> {
+    return this._http.put(this._routeUrl, value);
+  }
+
+  deleteRoute(routeId: number): Observable<Response> {
+    alert('Route Deleted');
+    return this._http.delete(this._routeUrl + routeId);
   }
 
   getAllRoutes(): Observable<IRoute[]> {
@@ -29,11 +38,7 @@ export class RouteService {
   }
 
   getRouteByName(routeName: string): Observable<IRoute[]> {
-    return this._http.get(this._routeUrl + 'name?searchByName=' + routeName)
+    return this._http.get(this._routeUrl + 'name?searchRoute=' + routeName)
       .map((response: Response) => response.json().routes);
-  }
-
-  deleteRoute(routeId: number): Observable<Response> {
-    return this._http.delete(this._routeUrl + routeId);
   }
 }
